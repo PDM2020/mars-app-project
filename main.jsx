@@ -5,11 +5,7 @@ var App = React.createClass({
 
   getInitialState: function(){
     return {
-        todos: [
-          {title: 'placeholder todo', complete: false},
-          {title: 'placeholder todo', complete: false},
-          {title: 'placeholder todo', complete: false}
-        ]
+        todos: []
       }
     },
 
@@ -25,20 +21,57 @@ var App = React.createClass({
 
       },
 
+removeTodo: function(todoData){
+  var newTodoArray = this.state.todos.filter(function(theTodoToRemove){
+ return todoData === theTodoToRemove ? false : true;
+
+  });
+
+  this.setState({todos: newTodoArray});
+
+
+},
+
     renderTodos: function(todo, index){
       return <Todo key={index}
                     id={index}
                     toggleComplete={this.toggleComplete}
-                    todoData={todo}/>;
+                    removeTodo={this.removeTodo}
+                    todoData={todo} />;
     },
 
+    addTodo: function(event){
+
+      event.preventDefault();
+
+      if(this.refs.addTodo.value){
+        this.state.todos.push({title: this.refs.addTodo.value, complete:false});
+        this.setState({todos:this.state.todos});
+        this.refs.addTodo.value= '';
+      }
+  },
+
   render:function(){
+    var number = this.state.todos.length;
     return (
       <div className="todo-list">
         <h1>To Do List</h1>
+        <div className="add-todo">
+          <form name="addTodoForm" onSubmit={this.addTodo}>
+            <input type="text" ref="addTodo"/>
+            <span>Hit enter to add to List</span>
+            </form>
+        </div>
         <ul>
-          { this.state.todos.map(this.renderTodos)}
+        { this.state.todos.map(this.renderTodos)}
         </ul>
+          <div className="todo-admin">
+            <div>
+              { number } { number > 1 || number === 0 ? "todos": "todo"}
+            </div>
+            <div>
+              
+          </div>
       </div>
     )
   }
@@ -54,7 +87,11 @@ var Todo = React.createClass({
     this.props.toggleComplete(this.props.todoData);
   },
 
-  render (){
+  tellParentToToggleTodoComplete: function(){
+    this.props.removeTodo(this.props.todoData);
+  },
+
+  render: function(){
     return (
       <li> {this.props.todoData.title}
         <input type="checkbox" id={this.props.id} checked={this.props.todoData.complete} onClick={this.tellParentToToggleTodoComplete} />
