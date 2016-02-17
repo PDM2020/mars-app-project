@@ -1,54 +1,87 @@
-var React = require('react');
-var ReactDOM = require('react-dom')
+var React= require('react');
+var ReactDOM = require('react-dom');
 
-//componentvar Timer = React.createClass({
-var Timer = React.createClass({
- getInitialState: function(){
-   return {
-     secondsElapsed: 0
-   }
- },
+var TweetBox = React.createClass({
 
- resetTimers: function(){
-   clearInterval(this.interval);
-   this.setState({ secondsElapsed: 0 });
-   this.start();
- },
+  propTypes:{
+    maxLength: React.PropTypes.number.isRequired
+  },
 
- tick: function(){
-   this.setState({ secondsElapsed: this.state.secondsElapsed +1 });
- },
+  getDefaultProps:function(){
+    return {
+      maxLength: 140
+    }
+  },
 
- start: function(){
-   this.interval = setInterval(this.tick, 1000);
- },
+  getInitialState: function(){
+    return {
+      text:'',
+      photoAdded: false
+    }
+  },
 
- componentDidMount: function(){
-   setTimeout(this.start, this.props.timeout);
- },
+  handleChange: function(event){
+  this.setState({text:event.target.value});
+  },
 
- render: function(){
-   return (
-   <p>
-     { this.props.name } has { this.state.secondsElapsed }s elapsed
-     <button onClick= {this.resetTimer} >RESET</button>
-   </p>
+  remainingChars: function(){
+        if(this.state.photoAdded) {
+          return (this.props.maxLength - 23 - this.state.text.length);
+          } else {
+          return(this.props.maxLength - this.state.text.length);
+      }
+  },
+    overFlowAlert: function(){
+    if(this.remainingChars() < 0){
 
-   );
-   }
-});
+      if(this.state.photoAdded){
+      var beforeOverFlowText = this.state.text.substring(130 - 23 , this.props.maxLength);
+      var overFlowText = this.state.text.substring(this.props.maxLength - 23);
+} else {
+      var beforeOverFlowText = this.state.text.substring(130, this.props.maxLength);
+      var overFlowText = this.state.text.substring(this.props.maxLength);
+      }
+      return (
+        <div className="alert alert-warning">
+          <strong>oops too long:{beforeOverFlowText}<span className="bg-danger">{ overFlowText }</span></strong>
+          </div>
+      )
+    } else {
+      return "";
+    }
+  },
 
-var Timers = React.createClass({
+  togglePhoto: function(){
+    this.setState({photoAdded: !this.state.photoAdded})
+  },
 
- render: function() {
-  return (
-    <div>
-      <Timer timeout={0}        name="Timer1" reset={this.resetTimers} />
-      <Timer timeout={500 * 10} name="Timer2" reset={this.resetTimers} />
-      <Timer timeout={700 * 10} name="Timer3" reset={this.resetTimers} />
+  render: function (){
+    return (
+
+      <div className="well clearfix">
+        {this.overFlowAlert()}
+      <textarea onChange={this.handleChange} className="form-control"></textarea><br/>
+      <span> {this.remainingChars()} </span>
+        <button className="btn btn-primary pull-right" disabled={this.state.text.length === 0 && !this.state.photoAdded } >Tweet</button>
+        <button className="btn btn-default pull-right" onClick={this.togglePhoto}>
+          { this.state.photoAdded ? " ✓Photo Added" : "Add Photo" }
+        </button>
     </div>
-  )
- }
+    )
+  }
 });
 
-ReactDOM.render(<Timers />, document.querySelector('.mount-node'));
+var MultiTweetBox = React.createClass({
+  render:function(){
+    return (
+      <div>
+<TweetBox maxLength={180}/>
+<TweetBox maxLength={200}/>
+<TweetBox maxLength={300}/>
+<TweetBox maxLength={400}/>
+<TweetBox />
+</div>
+    )
+  }
+})
+ReactDOM.render(<MultiTweetBox />, document.querySelector('.tweet-box'));
