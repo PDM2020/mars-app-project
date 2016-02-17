@@ -1,87 +1,68 @@
-var React= require('react');
+var React = require('react');
 var ReactDOM = require('react-dom');
 
-var TweetBox = React.createClass({
-
-  propTypes:{
-    maxLength: React.PropTypes.number.isRequired
-  },
-
-  getDefaultProps:function(){
-    return {
-      maxLength: 140
-    }
-  },
+var App = React.createClass({
 
   getInitialState: function(){
     return {
-      text:'',
-      photoAdded: false
-    }
-  },
-
-  handleChange: function(event){
-  this.setState({text:event.target.value});
-  },
-
-  remainingChars: function(){
-        if(this.state.photoAdded) {
-          return (this.props.maxLength - 23 - this.state.text.length);
-          } else {
-          return(this.props.maxLength - this.state.text.length);
+        todos: [
+          {title: 'placeholder todo', complete: false},
+          {title: 'placeholder todo', complete: false},
+          {title: 'placeholder todo', complete: false}
+        ]
       }
-  },
-    overFlowAlert: function(){
-    if(this.remainingChars() < 0){
+    },
 
-      if(this.state.photoAdded){
-      var beforeOverFlowText = this.state.text.substring(130 - 23 , this.props.maxLength);
-      var overFlowText = this.state.text.substring(this.props.maxLength - 23);
-} else {
-      var beforeOverFlowText = this.state.text.substring(130, this.props.maxLength);
-      var overFlowText = this.state.text.substring(this.props.maxLength);
-      }
-      return (
-        <div className="alert alert-warning">
-          <strong>oops too long:{beforeOverFlowText}<span className="bg-danger">{ overFlowText }</span></strong>
-          </div>
-      )
-    } else {
-      return "";
-    }
-  },
+      toggleComplete: function(theTodoFromTheInstance){
+        var newTodoArray = this.state.todos.map(function(theTodoToModify){
+          if(theTodoFromTheInstance === theTodoToModify){
+            theTodoToModify.complete = !theTodoToModify.complete;
+          }
+          return theTodoToModify;
+        });
 
-  togglePhoto: function(){
-    this.setState({photoAdded: !this.state.photoAdded})
-  },
+        this.setState({todos: newTodoArray});
 
-  render: function (){
+      },
+
+    renderTodos: function(todo, index){
+      return <Todo key={index}
+                    id={index}
+                    toggleComplete={this.toggleComplete}
+                    todoData={todo}/>;
+    },
+
+  render:function(){
     return (
-
-      <div className="well clearfix">
-        {this.overFlowAlert()}
-      <textarea onChange={this.handleChange} className="form-control"></textarea><br/>
-      <span> {this.remainingChars()} </span>
-        <button className="btn btn-primary pull-right" disabled={this.state.text.length === 0 && !this.state.photoAdded } >Tweet</button>
-        <button className="btn btn-default pull-right" onClick={this.togglePhoto}>
-          { this.state.photoAdded ? " ✓Photo Added" : "Add Photo" }
-        </button>
-    </div>
+      <div className="todo-list">
+        <h1>To Do List</h1>
+        <ul>
+          { this.state.todos.map(this.renderTodos)}
+        </ul>
+      </div>
     )
   }
 });
 
-var MultiTweetBox = React.createClass({
-  render:function(){
+var Todo = React.createClass({
+
+  getInitialState: function(){
+    return{};
+  },
+
+  tellParentToToggleTodoComplete: function(){
+    this.props.toggleComplete(this.props.todoData);
+  },
+
+  render (){
     return (
-      <div>
-<TweetBox maxLength={180}/>
-<TweetBox maxLength={200}/>
-<TweetBox maxLength={300}/>
-<TweetBox maxLength={400}/>
-<TweetBox />
-</div>
+      <li> {this.props.todoData.title}
+        <input type="checkbox" id={this.props.id} checked={this.props.todoData.complete} onClick={this.tellParentToToggleTodoComplete} />
+        <label htmlFor={this.props.id} key={this.props.key}></label>
+        <button><i className="fa fa-trash"></i></button>
+        </li>
     )
   }
-})
-ReactDOM.render(<MultiTweetBox />, document.querySelector('.tweet-box'));
+});
+
+ReactDOM.render(<App />, document.querySelector('#todo-app'));
