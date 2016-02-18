@@ -1,21 +1,20 @@
+'use strict';
 var React = require('react');
 var ReactDOM = require('react-dom');
+import { Router, Route, BrowserHistory, Redirect } from 'react-router';
 
+import Welcome from './components/welcome-screen.jsx';
+import Question from './components/question-screen.jsx';
+
+//components
 var MarsApp = React.createClass({
 
-
-  render:function(){
-    var number = this.state.todos.length;
+render:function(){
     return (
-      <div className="todo-list">
-        <h1>Mars App</h1>
-        <div className="mars-container">
-          Hello Mars!
-        </div>
 
-    )
+< Welcome />
+
+    );
   }
 });
-
-
-ReactDOM.render(<MarsApp />, document.querySelector('#mars-app'));
+ReactDOM.render(<MarsApp/>, document.querySelector('#mars-app'));

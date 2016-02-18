@@ -1,173 +1,111 @@
-/* Imported Fonts */
-/*-----------------------------------------*/
-@import url(https://fonts.googleapis.com/css?family=Roboto:400,400italic,700,700italic);
-@import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css);
-/* CSS Reset */
-/*-----------------------------------------*/
-/* http://meyerweb.com/eric/tools/css/reset/
-   v2.0 | 20110126
-   License: none (public domain)
-*/
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-size: 100%;
-  font: inherit;
-  vertical-align: baseline; }
+aside h1 {
+  font-family: 'Arial Black',sans-serif;
+  position: absolute;
+  transform: translateX(-114px) rotate(270deg);
+  font-size: 100px;
+  top: 114px;
+  text-transform:uppercase;
+  color: lightgrey;
+  }
 
-/* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure,
-footer, header, hgroup, menu, nav, section {
-  display: block; }
+.fa-space-shuttle {
+  font-size:4rem;
+  position:relative;
+  left:-2px;
+  color: white;
+  text-shadow: -4px 4px 4px rgba(100, 100, 100, 0.8);
+  transform: rotate(-90deg);
+  z-index:2;
+}
+.count-down {
+  width: 170px;
+  height: 75px;
+  background: #000;
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  border-radius: 4px;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+}
 
-body {
-  line-height: 1; }
+.count-down span {
+  font-family:'Digital 7', sans-serif;
+  text-shadow: 0 0 2px #167F39, 0 0 2px rgba(0, 255, 0, 0.2), 0 0 2px rgba(0, 255, 0, 0.8);
+  color:#167F39;
+  text-align:center;
+  font-size:60px;
+}
 
-ol, ul {
-  list-style: none; }
+.btn-box {
+  font-size: 16px;
+  box-shadow: 6px 6px 6px rgba(100,100,100,.8);
+  padding: 20px;
+  border-radius: 10px;
+  border-width: 2px;
+  border-color: #FFF;
+  border-style: solid;
+}
 
-blockquote, q {
-  quotes: none; }
+.wrapper {
+  background-color: #FFF;
+  width: 100vw;
+  height: 100vh;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  position: relative;
+}
 
-blockquote:before, blockquote:after,
-q:before, q:after {
-  content: '';
-  content: none; }
+aside {
+  background-color: #FFF;
+  position: relative;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  min-width: 150px;
+  max-width: 150px;
+  flex: 0 1 20%;
+  @include desktop {
+    display:flex;
+    }
+}
 
-table {
-  border-collapse: collapse;
-  border-spacing: 0; }
-
-/* Global */
-/*-----------------------------------------*/
-* {
-  box-sizing: border-box; }
-  *:focus {
-    outline: none; }
-
-html {
-  font-size: 18px; }
-
-body,
-button,
-input {
-  color: #111111;
-  font-family: 'Roboto', sans-serif;
-  font-size: 1rem;
-  line-height: 1.5; }
-
-body {
-  background-color: #2e2e2e; }
-
-/* To-Do List */
-/*-----------------------------------------*/
-#todo-app {
+section {
+  background: linear-gradient(to right, #CCCCCC, #F333333);
+  background: #F5853B;
+  width: 100%;
+  height: 100vh;
   display: flex;
   justify-content: center;
-  height: 100vh; }
-
-.todo-list {
-  align-self: center;
-  background-color: white;
-  border-radius: 5px;
-  width: 400px;
-  -webkit-box-shadow: 0px 0px 20px 0px rgba(50, 50, 50, 0.5);
-  -moz-box-shadow: 0px 0px 20px 0px rgba(50, 50, 50, 0.5);
-  box-shadow: 0px 0px 20px 0px rgba(50, 50, 50, 0.5); }
-  .todo-list h1 {
-    background-color: #a071b8;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    color: white;
-    font-size: 2rem;
-    padding: 0.5rem 1rem;
-    text-align: center; }
-  .todo-list li {
-    border-bottom: 1px solid #dbdbdb;
-    display: flex;
-    font-size: 1.25rem;
-    padding: 1rem;
-    align-items: flex-start; }
-    .todo-list li span {
-      flex: 1 0 60%;
-      font-size: .9rem;
-      margin-right: 1rem;
-      margin-top: 0.33333rem; }
-    .todo-list li input[type="checkbox"] {
-      display: none; }
-      .todo-list li input[type="checkbox"] + label:before {
-        display: inline-block;
-        color: #c2c2c2;
-        content: "\f10c";
-        cursor: pointer;
-        font-family: FontAwesome;
-        letter-spacing: 1rem; }
-      .todo-list li input[type="checkbox"] + label:hover::before {
-        color: #4ccbb0; }
-      .todo-list li input[type="checkbox"]:checked + label:before {
-        color: #4ccbb0;
-        content: "\f05d"; }
-    .todo-list li button {
-      background: transparent;
-      border: 0;
-      color: #c2c2c2;
-      cursor: pointer;
-      font-size: 1.25rem;
-      padding: 0; }
-      .todo-list li button:hover {
-        color: #fa4f4f; }
-
-.add-todo {
-  background-color: #c2c2c2;
-  padding: 1rem; }
-  .add-todo form {
-    align-items: center;
-    display: flex;
-    justify-content: space-between; }
-    .add-todo form input[type="text"] {
-      background-color: transparent;
-      border: 0;
-      border-bottom: 1px solid #8f8f8f;
-      font-size: 1rem;
-      line-height: 1;
-      padding: 0.33333rem; }
-      .add-todo form input[type="text"]:focus {
-        border-bottom-color: #a071b8; }
-    .add-todo form span {
-      color: #8f8f8f;
-      font-size: 0.9rem;
-      line-height: 1;
-      text-align: right; }
-
-.todo-admin {
   align-items: center;
+  flex: 1 0 80%;
+}
+
+.mars-rocket {
   display: flex;
-  font-size: 0.9rem;
-  justify-content: space-between;
-  min-height: 68px;
-  padding: 1rem; }
-  .todo-admin div span {
-    color: #c2c2c2; }
-  .todo-admin button {
-    background-color: transparent;
-    border: 1px solid #a071b8;
-    color: #a071b8;
-    cursor: pointer;
-    font-size: .9rem;
-    padding: 0.16667rem 0.33333rem; }
-    .todo-admin button:hover {
-      border: 1px solid #4ccbb0;
-      color: #4ccbb0; }
+  background: #F5853B;
+  width: 100px;
+  height: 100px;
+  line-height: 1rem;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  z-index:5;
+}
+
+
+.mars-quiz {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #F5853B;
+}
+
+.mars-app {
+  flex: 1 0 80%;
+  background: #F5853B;
+}
