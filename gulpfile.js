@@ -20,7 +20,7 @@ gulp.task('sass', function() {
 });
 
 gulp.task('compile-react', function() {
-	return gulp.src('main.jsx')
+	return gulp.src('mars-main.jsx')
 		.pipe(plumber())
 		.pipe(babel({
 			presets: ['es2015', 'react']
@@ -38,7 +38,7 @@ gulp.task('browser-sync', ['compile-react'], function() {
 		server: './'
 	});
 
-	gulp.watch(['main.jsx'], ['compile-react']);
+	gulp.watch(['mars-main.jsx'], ['compile-react']);
 	gulp.watch(['main.js', 'index.html']).on('change', browserSync.reload)
 });
 
