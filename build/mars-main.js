@@ -24798,9 +24798,8 @@
 	var Counter = React.createClass({
 	  displayName: 'Counter',
 
-	  //timer component
-	  // var Timer = React.createClass({
 
+	  //timer component
 	  getInitialState: function getInitialState() {
 	    return {
 	      secondsElapsed: 59
@@ -24813,7 +24812,7 @@
 	  componentWilllMount: function componentWilllMount() {},
 
 	  componentDidMount: function componentDidMount() {
-	    this.interval = setInterval(this.tick, 1000);
+	    this.interval = setInterval(this.tick, 1500);
 	  },
 
 	  render: function render() {
@@ -24829,7 +24828,7 @@
 	          React.createElement(
 	            'span',
 	            null,
-	            '00:',
+	            ':',
 	            this.state.secondsElapsed
 	          )
 	        ),

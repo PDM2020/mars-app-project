@@ -23,18 +23,21 @@ aside h1 {
   height: 75px;
   background: #000;
   position: absolute;
-  right: 1rem;
   top: 1rem;
-  border-radius: 4px;
+  border-radius: 8px;
   justify-content: center;
   display: flex;
   align-items: center;
+  @include desktop {
+  right: 1rem;
+    }
 }
 
 .count-down span {
   font-family:'Digital 7', sans-serif;
-  text-shadow: 0 0 2px #167F39, 0 0 2px rgba(0, 255, 0, 0.2), 0 0 2px rgba(0, 255, 0, 0.8);
+  text-shadow: 0 0 10px lightgreen, 0 0 2px rgba(0, 255, 0, 0.2), 0 0 10px rgba(0, 255, 0, 0.8);
   color:#167F39;
+  letter-spacing: 5px;
   text-align:center;
   font-size:60px;
 }
