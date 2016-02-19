@@ -1,4 +1,4 @@
-
+//npm packages
 var gulp = require('gulp');
 var notify = require('gulp-notify');
 var browserSync = require('browser-sync');
@@ -8,7 +8,15 @@ var autoprefixer = require('gulp-autoprefixer');
 var minifyCSS = require('gulp-minify-css');
 var rename = require('gulp-rename');
 var webpack = require('webpack-stream');
+var historyApiFallback = require('connect-history-api-fallback');
 
+//Paths
+// var jsMain    = './src/**/*.jsx';
+// var sassMain  = './src/_main.scss';
+// var htmlMain  = './src/index.html';
+// var basePath  = './src/';
+// var buildPath = './build';
+// var compPath  = 'components/*.jsx';
 
 gulp.task('sass', function() {
 
@@ -17,11 +25,11 @@ gulp.task('sass', function() {
         .pipe(autoprefixer({browsers: ['last 2 versions']}))
         .pipe(minifyCSS())
         .pipe(rename('style.min.css'))
-        .pipe(gulp.dest('./css'));
+        .pipe(gulp.dest('./build'));
 });
 
 gulp.task('compile-react', function() {
-	return gulp.src('mars-main.jsx')//keep same path as watch line 53
+	return gulp.src('mars-main.jsx')
 	.pipe(plumber({errorHandler: notify.onError('Error: <%= error.message %>')}))
 	.pipe(webpack({
 		output: {
@@ -40,18 +48,28 @@ gulp.task('compile-react', function() {
 			]
 		}
 	}))
-	.pipe(gulp.dest('./'));
+
+	.pipe(gulp.dest('./build'));
 });
 
+gulp.task('copy-html',function(){
+  gulp.src('./index.html')
+  .pipe(gulp.dest('./build'));
+});
 
 gulp.task('browser-sync', ['compile-react'], function() {
 
 	browserSync.init({
-		server: './'
+		server: {
+    baseDir:'./build',
+    middleware:[historyApiFallback()]
+    }
 	});
+
   gulp.watch(['./sass/**/*.scss'],['sass']);
 	gulp.watch(['mars-main.jsx'], ['compile-react']);
-	gulp.watch(['mars-main.js', 'index.html','./css/style.min.css']).on('change', browserSync.reload)
+	gulp.watch(['./build/mars-main.js', './build/index.html','./build/style.min.css']).on('change', browserSync.reload);
+  gulp.watch(['./index.html'],['copy-html']);
 });
 
 gulp.task('default', ['browser-sync']);

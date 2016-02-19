@@ -48,15 +48,19 @@
 
 	var _reactRouter = __webpack_require__(1);
 
-	var _questionScreen = __webpack_require__(215);
-
-	var _questionScreen2 = _interopRequireDefault(_questionScreen);
-
-	var _welcomeScreen = __webpack_require__(217);
+	var _welcomeScreen = __webpack_require__(215);
 
 	var _welcomeScreen2 = _interopRequireDefault(_welcomeScreen);
 
-	var _notfoundScreen = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./components/notfound-screen.jsx\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var _questionScreen = __webpack_require__(217);
+
+	var _questionScreen2 = _interopRequireDefault(_questionScreen);
+
+	var _counterScreen = __webpack_require__(218);
+
+	var _counterScreen2 = _interopRequireDefault(_counterScreen);
+
+	var _notfoundScreen = __webpack_require__(219);
 
 	var _notfoundScreen2 = _interopRequireDefault(_notfoundScreen);
 
@@ -74,11 +78,11 @@
 	    render: function render() {
 	        return React.createElement(
 	            _reactRouter.Router,
-	            null,
+	            { history: _reactRouter.browserHistory },
 	            React.createElement(_reactRouter.Redirect, { from: '/', to: '/welcome' }),
-	            React.createElement(_reactRouter.Router, { history: browserHistory() }),
-	            React.createElement(_reactRouter.Route, { path: 'mars-test', component: _welcomeScreen2.default }),
-	            React.createElement(_reactRouter.Route, { path: 'mars-test', component: _questionScreen2.default }),
+	            React.createElement(_reactRouter.Route, { path: '/welcome', component: _welcomeScreen2.default }),
+	            React.createElement(_reactRouter.Route, { path: '/mars-test', component: _questionScreen2.default }),
+	            React.createElement(_reactRouter.Route, { path: '/countdown', component: _counterScreen2.default }),
 	            React.createElement(_reactRouter.Route, { path: '*', component: _notfoundScreen2.default })
 	        );
 	    }
@@ -24714,58 +24718,23 @@
 	var ReactDOM = __webpack_require__(216);
 
 
-	// import Question from '.components/question-screen.jsx';
-	// import Welcome from '.components/welcome-screen.jsx';
-	// import NoMatch from '.components/404-screen.jsx';
-
-	var Question = React.createClass({
-	  displayName: 'Question',
+	var Welcome = React.createClass({
+	    displayName: 'Welcome',
 
 
-	  render: function render() {
-	    return React.createElement(
-	      'div',
-	      { className: 'wrapper' },
-	      React.createElement(
-	        'aside',
-	        null,
-	        React.createElement(
-	          'h1',
-	          null,
-	          'Mars'
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'mars-rocket' },
-	          React.createElement('i', { className: 'fa fa-space-shuttle' })
-	        )
-	      ),
-	      React.createElement(
-	        'section',
-	        { className: 'mars-quiz' },
-	        React.createElement(
-	          'div',
-	          { className: 'count-down' },
-	          React.createElement(
-	            'span',
-	            null,
-	            '00:59'
-	          )
-	        ),
-	        React.createElement(
-	          'div',
-	          null,
-	          React.createElement(
-	            'button',
-	            { className: 'allCaps btn-box' },
-	            'Start quiz'
-	          )
-	        )
-	      )
-	    );
-	  }
+	    render: function render() {
+	        return React.createElement(
+	            'section',
+	            { className: 'mars-quiz' },
+	            React.createElement(
+	                'button',
+	                { className: 'allCaps btn-box' },
+	                'Begin journey'
+	            )
+	        );
+	    }
 	});
-	module.exports = Question;
+	module.exports = Welcome;
 
 /***/ },
 /* 216 */
@@ -24788,23 +24757,117 @@
 	var ReactDOM = __webpack_require__(216);
 
 
-	// import Question from '.components/question-screen.jsx';
-	// import Welcome from '.components/welcome-screen.jsx';
-	// import NoMatch from '.components/404-screen.jsx';
-
-	var Welcome = React.createClass({
-	  displayName: 'Welcome',
+	var Question = React.createClass({
+	  displayName: 'Question',
 
 
 	  render: function render() {
 	    return React.createElement(
 	      'div',
 	      null,
-	      'Welcome'
+	      React.createElement(
+	        'section',
+	        { className: 'mars-quiz' },
+	        React.createElement(
+	          'div',
+	          null,
+	          React.createElement(
+	            'button',
+	            { className: 'allCaps btn-box' },
+	            'start quiz'
+	          )
+	        )
+	      )
 	    );
 	  }
 	});
-	module.exports = Welcome;
+	module.exports = Question;
+
+/***/ },
+/* 218 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _reactRouter = __webpack_require__(1);
+
+	var React = __webpack_require__(24);
+	var ReactDOM = __webpack_require__(216);
+
+
+	var Counter = React.createClass({
+	  displayName: 'Counter',
+
+	  //timer component
+	  // var Timer = React.createClass({
+
+	  getInitialState: function getInitialState() {
+	    return {
+	      secondsElapsed: 59
+	    };
+	  },
+	  tick: function tick() {
+	    this.setState({ secondsElapsed: this.state.secondsElapsed - 1 });
+	  },
+
+	  componentWilllMount: function componentWilllMount() {},
+
+	  componentDidMount: function componentDidMount() {
+	    this.interval = setInterval(this.tick, 1000);
+	  },
+
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'section',
+	        { className: 'mars-quiz' },
+	        React.createElement(
+	          'div',
+	          { className: 'count-down' },
+	          React.createElement(
+	            'span',
+	            null,
+	            '00:',
+	            this.state.secondsElapsed
+	          )
+	        ),
+	        React.createElement(
+	          'button',
+	          { className: 'allCaps btn-box' },
+	          'no pressure!'
+	        )
+	      )
+	    );
+	  }
+	});
+	// });
+	// end of counter html mark up
+
+	module.exports = Counter;
+
+/***/ },
+/* 219 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var React = __webpack_require__(24);
+
+	var NotFound = React.createClass({
+	  displayName: "NotFound",
+
+
+	  render: function render() {
+	    return React.createElement(
+	      "div",
+	      { className: "wrapper" },
+	      "not found"
+	    );
+	  }
+	});
+	module.exports = NotFound;
 
 /***/ }
 /******/ ]);

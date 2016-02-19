@@ -1,11 +1,12 @@
 aside h1 {
   font-family: 'Arial Black',sans-serif;
   position: absolute;
-  transform: translateX(-114px) rotate(270deg);
+  transform: translateX(-100px) rotate(270deg);
   font-size: 100px;
   top: 114px;
   text-transform:uppercase;
   color: lightgrey;
+  letter-spacing: -8px;
   }
 
 .fa-space-shuttle {
@@ -38,7 +39,7 @@ aside h1 {
   font-size:60px;
 }
 
-.btn-box {
+button, .btn-box {
   font-size: 16px;
   box-shadow: 6px 6px 6px rgba(100,100,100,.8);
   padding: 20px;
@@ -59,6 +60,8 @@ aside h1 {
 }
 
 aside {
+  width: 100vw;
+  height: 100vh;
   background-color: #FFF;
   position: relative;
   display: none;
@@ -72,7 +75,7 @@ aside {
     }
 }
 
-section {
+#mars-app {
   background: linear-gradient(to right, #CCCCCC, #F333333);
   background: #F5853B;
   width: 100%;
