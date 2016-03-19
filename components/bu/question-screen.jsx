@@ -7,12 +7,13 @@ var Question = React.createClass({
 render:function(){
     return (
       <div>
-    <section className="mars-quiz">
-        <div>
-          <button className="allCaps btn-box">start quiz</button>
+        <section className="mars-quiz">
+          <div className="count-down">
+            <span><Counter/></span>
+            </div>
+            <button className="allCaps btn-box">no pressure!</button>
+          </section>
         </div>
-      </section>
-    </div>
     )
   }
 });

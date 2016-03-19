@@ -1,12 +1,8 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
-// import { Router, Route, BrowserHistory, Redirect } from 'react-router';
+import {BrowserHistory} from 'react-router';
 
-// var elapsed = Math.round(this.state.elapsed / 100);
-//   // This will give a number with one digit after the decimal dot (xx.x):
-// var seconds = (elapsed / 10).toFixed(1);
-
-// var Counter = React.createClass({
+var Counter = React.createClass({
 
   //timer component
     getInitialState: function(){
@@ -42,4 +38,4 @@ var ReactDOM = require('react-dom');
 // });
 // end of counter html mark up
 
-// module.exports = Counter;
+module.exports = Counter;

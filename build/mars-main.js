@@ -52,9 +52,13 @@
 
 	var _welcomeScreen2 = _interopRequireDefault(_welcomeScreen);
 
-	var _questionScreen = __webpack_require__(217);
+	var _submitQuestionScreen = __webpack_require__(216);
 
-	var _questionScreen2 = _interopRequireDefault(_questionScreen);
+	var _submitQuestionScreen2 = _interopRequireDefault(_submitQuestionScreen);
+
+	var _questionPageScreen = __webpack_require__(217);
+
+	var _questionPageScreen2 = _interopRequireDefault(_questionPageScreen);
 
 	var _counterScreen = __webpack_require__(218);
 
@@ -64,10 +68,18 @@
 
 	var _notfoundScreen2 = _interopRequireDefault(_notfoundScreen);
 
+	var _rejectedScreen = __webpack_require__(220);
+
+	var _rejectedScreen2 = _interopRequireDefault(_rejectedScreen);
+
+	var _acceptedScreen = __webpack_require__(221);
+
+	var _acceptedScreen2 = _interopRequireDefault(_acceptedScreen);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var React = __webpack_require__(24);
-	var ReactDOM = __webpack_require__(216);
+	var ReactDOM = __webpack_require__(222);
 
 
 	//components
@@ -81,7 +93,8 @@
 	            { history: _reactRouter.browserHistory },
 	            React.createElement(_reactRouter.Redirect, { from: '/', to: '/welcome' }),
 	            React.createElement(_reactRouter.Route, { path: '/welcome', component: _welcomeScreen2.default }),
-	            React.createElement(_reactRouter.Route, { path: '/mars-test', component: _questionScreen2.default }),
+	            React.createElement(_reactRouter.Route, { path: '/questionpage', component: _questionPageScreen2.default }),
+	            React.createElement(_reactRouter.Route, { path: '/submitquestion', component: _submitQuestionScreen2.default }),
 	            React.createElement(_reactRouter.Route, { path: '/countdown', component: _counterScreen2.default }),
 	            React.createElement(_reactRouter.Route, { path: '*', component: _notfoundScreen2.default })
 	        );
@@ -24715,24 +24728,39 @@
 	var _reactRouter = __webpack_require__(1);
 
 	var React = __webpack_require__(24);
-	var ReactDOM = __webpack_require__(216);
-
 
 	var Welcome = React.createClass({
-	    displayName: 'Welcome',
+	  displayName: 'Welcome',
 
 
-	    render: function render() {
-	        return React.createElement(
-	            'section',
-	            { className: 'mars-quiz' },
-	            React.createElement(
-	                'button',
-	                { className: 'allCaps btn-box' },
-	                'Begin journey'
-	            )
-	        );
-	    }
+	  // contextTypes: {
+	  //   router: PropTypes.React.object.isRequired;
+	  // }
+
+	  changePage: function changePage() {
+	    this.props.history.push('/questionpage');
+	    //   this.context.router.push('/questionpage')
+	  },
+
+	  /////////////////////////////////////////////////////////////
+	  // contextTypes: {
+	  //   router: React.PropTypes.object.isRequired
+	  // },
+	  // changePage(){
+	  // this.context.router.push('/questionpage')
+	  // }
+
+	  render: function render() {
+	    return React.createElement(
+	      'section',
+	      { className: 'mars-quiz' },
+	      React.createElement(
+	        'button',
+	        { className: 'allCaps btn-box', onClick: this.changePage },
+	        'begin journey'
+	      )
+	    );
+	  }
 	});
 	module.exports = Welcome;
 
@@ -24742,8 +24770,59 @@
 
 	'use strict';
 
-	module.exports = __webpack_require__(26);
+	var React = __webpack_require__(24);
 
+	var SubmitQuestion = React.createClass({
+	  displayName: 'SubmitQuestion',
+	  _handleTrue: function _handleTrue() {
+	    this.props.onAnswer(true);
+	  },
+	  render: function render() {
+	    var _this = this;
+
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'p',
+	        null,
+	        this.props.currentQuestion.question
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'btn-box' },
+	        React.createElement(
+	          'button',
+	          { onClick: this._handleTrue },
+	          React.createElement(
+	            'span',
+	            null,
+	            'True'
+	          )
+	        ),
+	        React.createElement(
+	          'button',
+	          { onClick: function onClick() {
+	              return _this.props.onAnswer(false);
+	            } },
+	          React.createElement(
+	            'span',
+	            null,
+	            'False'
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+	SubmitQuestion.propTypes = {
+	  currentQuestion: React.PropTypes.shape({
+	    question: React.PropTypes.string.isRequired,
+	    answer: React.PropTypes.bool.isRequired }).isRequired,
+	  onAnswer: React.PropTypes.func.isRequired
+	};
+
+	module.exports = SubmitQuestion;
 
 /***/ },
 /* 217 */
@@ -24753,35 +24832,87 @@
 
 	var _reactRouter = __webpack_require__(1);
 
+	var _submitQuestionScreen = __webpack_require__(216);
+
+	var _submitQuestionScreen2 = _interopRequireDefault(_submitQuestionScreen);
+
+	var _counterScreen = __webpack_require__(218);
+
+	var _counterScreen2 = _interopRequireDefault(_counterScreen);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	var React = __webpack_require__(24);
-	var ReactDOM = __webpack_require__(216);
 
 
-	var Question = React.createClass({
-	  displayName: 'Question',
+	var QuestionPage = React.createClass({
+		displayName: 'QuestionPage',
 
 
-	  render: function render() {
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'section',
-	        { className: 'mars-quiz' },
-	        React.createElement(
-	          'div',
-	          null,
-	          React.createElement(
-	            'button',
-	            { className: 'allCaps btn-box' },
-	            'start quiz'
-	          )
-	        )
-	      )
-	    );
-	  }
+		getInitialState: function getInitialState() {
+			return {
+				correctCount: 0,
+				questionIndex: 0
+			};
+		},
+
+		componentWillUpdate: function componentWillUpdate(nextProps, nextState) {
+			if (nextState.questionIndex === nextProps.questions.length) {
+				this.state.correctCount === 2 ? this.props.onCorrect() : this.props.onFailure();
+			}
+		},
+		_handleUserAnswer: function _handleUserAnswer(userAnswer) {
+			var correctAnswer = this.props.questions[this.state.questionIndex].answer;
+			var currentCorrectCount = this.state.correctCount;
+
+			if (correctAnswer === userAnswer) {
+				currentCorrectCount = currentCorrectCount + 1;
+				this.setState({
+					correctCount: currentCorrectCount,
+					questionIndex: this.state.questionIndex + 1
+				});
+			}
+		},
+		_handleFailure: function _handleFailure() {
+			_reactRouter.browserHistory.push('./rejected');
+		},
+		render: function render() {
+			return React.createElement(
+				'div',
+				{ className: 'mars-quiz' },
+				React.createElement(
+					'h1',
+					null,
+					'helrrrro!'
+				),
+				React.createElement(_counterScreen2.default, { initialStartTime: 1, startTimer: true, onTimerFinished: this._handleFailure }),
+				React.createElement('submitQuestion', {
+					currentQuestion: this.props.questions[this.state.questionIndex],
+					onAnswer: this._handleUserAnswer })
+			);
+		}
 	});
-	module.exports = Question;
+
+	QuestionPage.propTypes = {
+		questions: React.PropTypes.arrayOf(React.PropTypes.shape({
+			question: React.PropTypes.string.isRequired,
+			answer: React.PropTypes.bool.isRequired
+		}).isRequired).isRequired
+	};
+	QuestionPage.defaultProps = {
+		questions: [{
+			question: 'do you like mars?',
+			answer: true
+		}, {
+			question: 'can you swim?',
+			answer: true
+		}, {
+			question: 'can you sit for long periods of time?',
+			answer: true
+		}]
+	};
+
+	module.exports = QuestionPage;
 
 /***/ },
 /* 218 */
@@ -24792,8 +24923,6 @@
 	var _reactRouter = __webpack_require__(1);
 
 	var React = __webpack_require__(24);
-	var ReactDOM = __webpack_require__(216);
-
 
 	var Counter = React.createClass({
 	  displayName: 'Counter',
@@ -24802,46 +24931,43 @@
 	  //timer component
 	  getInitialState: function getInitialState() {
 	    return {
-	      secondsElapsed: 59
+	      secondsToElapse: this.props.initialStartTime
 	    };
 	  },
-	  tick: function tick() {
-	    this.setState({ secondsElapsed: this.state.secondsElapsed - 1 });
+
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    if (nextProps.startTimer) this.startTimer();
 	  },
-
-	  componentWilllMount: function componentWilllMount() {},
-
-	  componentDidMount: function componentDidMount() {
-	    this.interval = setInterval(this.tick, 1500);
+	  componentDidUpdate: function componentDidUpdate(prevProps, prevState) {
+	    if (this.state.secondsToElapse === 0) this.props.onTimerFinished();
 	  },
-
+	  componentWillUnmount: function componentWillUnmount() {
+	    clearInterval(this.interval);
+	  },
+	  _decrementCounter: function _decrementCounter() {
+	    this.setState({ secondsToElapse: this.state.secondsToElapse - 1 });
+	  },
+	  startTimer: function startTimer() {
+	    this.interval = setInterval(this._decrementCounter, 1000);
+	  },
 	  render: function render() {
 	    return React.createElement(
 	      'div',
-	      null,
-	      React.createElement(
-	        'section',
-	        { className: 'mars-quiz' },
-	        React.createElement(
-	          'div',
-	          { className: 'count-down' },
-	          React.createElement(
-	            'span',
-	            null,
-	            ':',
-	            this.state.secondsElapsed
-	          )
-	        ),
-	        React.createElement(
-	          'button',
-	          { className: 'allCaps btn-box' },
-	          'no pressure!'
-	        )
-	      )
+	      { className: this.props.startTimer ? "count-down" : "count-down hidden-counter" },
+	      ' ',
+	      this.state.secondsToElapse
 	    );
 	  }
 	});
-	// });
+
+	Counter.propTypes = {
+	  initialStartTime: React.PropTypes.number.isRequired,
+	  startTimer: React.PropTypes.bool.isRequired,
+	  onTimerFinished: React.PropTypes.func.isRequired
+	};
+	Counter.defaultProps = {
+	  initialStarTime: 60
+	};
 	// end of counter html mark up
 
 	module.exports = Counter;
@@ -24867,6 +24993,93 @@
 	  }
 	});
 	module.exports = NotFound;
+
+/***/ },
+/* 220 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _reactRouter = __webpack_require__(1);
+
+	var React = __webpack_require__(24);
+
+	var Rejected = React.createClass({
+	  displayName: 'Rejected',
+
+	  changePage: function changePage() {
+	    this.props.history.push('/questionpage');
+	  },
+
+	  render: function render() {
+	    return React.createElement(
+	      'section',
+	      { className: 'mars-quiz' },
+	      React.createElement(
+	        'h1',
+	        { className: 'nf' },
+	        'wrong answer'
+	      ),
+	      React.createElement(
+	        'button',
+	        { className: 'allCaps btn-box', onClick: this.changePage },
+	        'try again'
+	      )
+	    );
+	  }
+	});
+	module.exports = Rejected;
+
+/***/ },
+/* 221 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _reactRouter = __webpack_require__(1);
+
+	var React = __webpack_require__(24);
+
+
+	var Accepted = React.createClass({
+	  displayName: 'Accepted',
+
+
+	  changePage: function changePage() {
+	    this.props.history.push('/welcome');
+	  },
+
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'section',
+	        { className: 'mars-quiz' },
+	        React.createElement(
+	          'h1',
+	          { className: 'nf' },
+	          'Bon Voyage'
+	        ),
+	        React.createElement(
+	          'button',
+	          { className: 'allCaps btn-box', onClick: this.changePage },
+	          'Welcome Page'
+	        )
+	      )
+	    );
+	  }
+	});
+	module.exports = Accepted;
+
+/***/ },
+/* 222 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	module.exports = __webpack_require__(26);
+
 
 /***/ }
 /******/ ]);

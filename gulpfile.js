@@ -16,7 +16,7 @@ var historyApiFallback = require('connect-history-api-fallback');
 // var htmlMain  = './src/index.html';
 // var basePath  = './src/';
 // var buildPath = './build';
-// var compPath  = 'components/*.jsx';
+ var compPath  = './components/*.jsx';
 
 gulp.task('sass', function() {
 
@@ -35,6 +35,8 @@ gulp.task('compile-react', function() {
 		output: {
 			filename: 'mars-main.js'
 		},
+    debug: true,
+    devtool:'inline-source-map',
 		module: {
 			loaders: [
 				{
@@ -61,13 +63,13 @@ gulp.task('browser-sync', ['compile-react'], function() {
 
 	browserSync.init({
 		server: {
-    baseDir:'./build',
-    middleware:[historyApiFallback()]
+      baseDir:'./build',
+      middleware:[historyApiFallback()]
     }
 	});
 
   gulp.watch(['./sass/**/*.scss'],['sass']);
-	gulp.watch(['mars-main.jsx'], ['compile-react']);
+	gulp.watch(['mars-main.jsx',compPath], ['compile-react']);
 	gulp.watch(['./build/mars-main.js', './build/index.html','./build/style.min.css']).on('change', browserSync.reload);
   gulp.watch(['./index.html'],['copy-html']);
 });

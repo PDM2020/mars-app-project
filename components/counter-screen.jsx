@@ -1,41 +1,51 @@
 var React = require('react');
-var ReactDOM = require('react-dom');
-import { Router, Route, BrowserHistory, Redirect } from 'react-router';
+
+import {BrowserHistory} from 'react-router';
 
 var Counter = React.createClass({
 
   //timer component
     getInitialState: function(){
      return {
-       secondsElapsed: 59
+       secondsToElapse: this.props.initialStartTime
        };
     },
-      tick: function(){
-        this.setState(
-        {secondsElapsed:this.state.secondsElapsed -1}
-        );
+
+    componentWillReceiveProps(nextProps) {
+      if(nextProps.startTimer) this.startTimer();
     },
 
-      componentWilllMount: function(){},
+    componentDidUpdate(prevProps,prevState) {
+      if(this.state.secondsToElapse === 0) this.props.onTimerFinished();
+    },
 
-      componentDidMount: function(){
-        this.interval = setInterval(this.tick, 1500);
+    componentWillUnmount(){
+      clearInterval(this.interval);
+    },
+
+    _decrementCounter(){
+      this.setState({secondsToElapse: this.state.secondsToElapse - 1});
+      },
+
+        startTimer(){
+          this.interval = setInterval(this._decrementCounter, 1000);
         },
 
-    render: function() {
-      return (
-    <div>
-      <section className="mars-quiz">
-        <div className="count-down">
-          <span>:{this.state.secondsElapsed}</span>
-          </div>
-          <button className="allCaps btn-box">no pressure!</button>
-        </section>
-      </div>
+      render () {
+        return (
+          <div className={this.props.startTimer ? "count-down" : "count-down hidden-counter" }> {this.state.secondsToElapse}</div>
     )
-  }
+  },
   });
-// });
+
+Counter.propTypes = {
+  initialStartTime: React.PropTypes.number.isRequired,
+  startTimer: React.PropTypes.bool.isRequired,
+  onTimerFinished: React.PropTypes.func.isRequired
+};
+Counter.defaultProps = {
+  initialStarTime: 60
+};
 // end of counter html mark up
 
 module.exports = Counter;

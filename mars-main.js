@@ -48,22 +48,30 @@
 
 	var _reactRouter = __webpack_require__(1);
 
-	var _questionScreen = __webpack_require__(215);
-
-	var _questionScreen2 = _interopRequireDefault(_questionScreen);
-
-	var _welcomeScreen = __webpack_require__(217);
+	var _welcomeScreen = __webpack_require__(215);
 
 	var _welcomeScreen2 = _interopRequireDefault(_welcomeScreen);
 
-	var _notfoundScreen = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./components/notfound-screen.jsx\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var _submitQuestionScreen = __webpack_require__(216);
+
+	var _submitQuestionScreen2 = _interopRequireDefault(_submitQuestionScreen);
+
+	var _questionPageScreen = __webpack_require__(217);
+
+	var _questionPageScreen2 = _interopRequireDefault(_questionPageScreen);
+
+	var _counterScreen = __webpack_require__(218);
+
+	var _counterScreen2 = _interopRequireDefault(_counterScreen);
+
+	var _notfoundScreen = __webpack_require__(219);
 
 	var _notfoundScreen2 = _interopRequireDefault(_notfoundScreen);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var React = __webpack_require__(24);
-	var ReactDOM = __webpack_require__(216);
+	var ReactDOM = __webpack_require__(220);
 
 
 	//components
@@ -74,11 +82,12 @@
 	    render: function render() {
 	        return React.createElement(
 	            _reactRouter.Router,
-	            null,
+	            { history: _reactRouter.browserHistory },
 	            React.createElement(_reactRouter.Redirect, { from: '/', to: '/welcome' }),
-	            React.createElement(_reactRouter.Router, { history: browserHistory() }),
-	            React.createElement(_reactRouter.Route, { path: 'mars-test', component: _welcomeScreen2.default }),
-	            React.createElement(_reactRouter.Route, { path: 'mars-test', component: _questionScreen2.default }),
+	            React.createElement(_reactRouter.Route, { path: '/welcome', component: _welcomeScreen2.default }),
+	            React.createElement(_reactRouter.Route, { path: '/questionpage', component: _questionPageScreen2.default }),
+	            React.createElement(_reactRouter.Route, { path: '/submitQuestion', component: _submitQuestionScreen2.default }),
+	            React.createElement(_reactRouter.Route, { path: '/countdown', component: _counterScreen2.default }),
 	            React.createElement(_reactRouter.Route, { path: '*', component: _notfoundScreen2.default })
 	        );
 	    }
@@ -24711,61 +24720,27 @@
 	var _reactRouter = __webpack_require__(1);
 
 	var React = __webpack_require__(24);
-	var ReactDOM = __webpack_require__(216);
 
-
-	// import Question from '.components/question-screen.jsx';
-	// import Welcome from '.components/welcome-screen.jsx';
-	// import NoMatch from '.components/404-screen.jsx';
-
-	var Question = React.createClass({
-	  displayName: 'Question',
+	var Welcome = React.createClass({
+	  displayName: 'Welcome',
+	  changePage: function changePage() {
+	    this.props.history.push('/questionpage');
+	  },
 
 
 	  render: function render() {
 	    return React.createElement(
-	      'div',
-	      { className: 'wrapper' },
+	      'section',
+	      { className: 'mars-quiz' },
 	      React.createElement(
-	        'aside',
-	        null,
-	        React.createElement(
-	          'h1',
-	          null,
-	          'Mars'
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'mars-rocket' },
-	          React.createElement('i', { className: 'fa fa-space-shuttle' })
-	        )
-	      ),
-	      React.createElement(
-	        'section',
-	        { className: 'mars-quiz' },
-	        React.createElement(
-	          'div',
-	          { className: 'count-down' },
-	          React.createElement(
-	            'span',
-	            null,
-	            '00:59'
-	          )
-	        ),
-	        React.createElement(
-	          'div',
-	          null,
-	          React.createElement(
-	            'button',
-	            { className: 'allCaps btn-box' },
-	            'Start quiz'
-	          )
-	        )
+	        'button',
+	        { className: 'allCaps btn-box', onClick: this.changePage },
+	        'Begin journey'
 	      )
 	    );
 	  }
 	});
-	module.exports = Question;
+	module.exports = Welcome;
 
 /***/ },
 /* 216 */
@@ -24773,8 +24748,47 @@
 
 	'use strict';
 
-	module.exports = __webpack_require__(26);
+	var React = __webpack_require__(24);
 
+	var SubmitQuestion = React.createClass({
+	  displayName: 'SubmitQuestion',
+	  _handleTrue: function _handleTrue() {
+	    this.props.onAnswer(true);
+	  },
+	  render: function render() {
+	    var _this = this;
+
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'p',
+	        null,
+	        this.props.currentQuestion.question
+	      ),
+	      React.createElement(
+	        'button',
+	        { onClick: this._handleTrue },
+	        'True'
+	      ),
+	      React.createElement(
+	        'button',
+	        { onClick: function onClick() {
+	            return _this.props.onAnswer(false);
+	          } },
+	        'False'
+	      )
+	    );
+	  }
+	});
+	SubmitQuestion.propTypes = {
+	  currentQuestion: React.PropTypes.shape({
+	    question: React.PropTypes.string.isRequired,
+	    answer: React.PropTypes.bool.isRequired }).isRequired,
+	  onAnswer: React.PropTypes.func.isRequired
+	};
+
+	module.exports = SubmitQuestion;
 
 /***/ },
 /* 217 */
@@ -24784,27 +24798,169 @@
 
 	var _reactRouter = __webpack_require__(1);
 
+	var _submitQuestionScreen = __webpack_require__(216);
+
+	var _submitQuestionScreen2 = _interopRequireDefault(_submitQuestionScreen);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	var React = __webpack_require__(24);
-	var ReactDOM = __webpack_require__(216);
 
 
-	// import Question from '.components/question-screen.jsx';
-	// import Welcome from '.components/welcome-screen.jsx';
-	// import NoMatch from '.components/404-screen.jsx';
+	var QuestionPage = React.createClass({
+		displayName: 'QuestionPage',
 
-	var Welcome = React.createClass({
-	  displayName: 'Welcome',
+
+		getInitialState: function getInitialState() {
+			return {
+				correctCount: 0,
+				questionIndex: 0
+			};
+		},
+
+		componentWillUpdate: function componentWillUpdate(nextProps, nextState) {
+			if (nextState.questionIndex === nextProps.questions.length) {
+				this.state.correctCount === 2 ? this.props.onCorrect() : this.props.onFailure();
+			}
+		},
+		render: function render() {
+			return React.createElement(
+				'div',
+				{ className: 'mars-quiz' },
+				React.createElement(
+					'h1',
+					null,
+					'LKDFJGKGFJLKFGJLKFDJ'
+				),
+				React.createElement('submitQuestion', {
+					currentQuestion: this.props.questions[this.state.questionIndex],
+					onAnswer: this._handleUserAnswer })
+			);
+		},
+		_handleUserAnswer: function _handleUserAnswer(userAnswer) {
+			var correctAnswer = this.props.questions[this.state.questionIndex].answer;
+			var currentCorrectCount = this.state.correctCount;
+
+			if (correctAnswer === userAnswer) {
+				currentCorrectCount = currentCorrectCount + 1;
+			}
+
+			this.setState({
+				correctCount: currentCorrectCount,
+				questionIndex: this.state.questionIndex + 1
+			});
+		}
+	});
+
+	QuestionPage.propTypes = {
+		questions: React.PropTypes.arrayOf(React.PropTypes.shape({
+			question: React.PropTypes.string.isRequired,
+			answer: React.PropTypes.bool.isRequired
+		}).isRequired).isRequired
+	};
+	QuestionPage.defaultProps = {
+		questions: [{
+			question: 'do you like mars?',
+			answer: true
+		}, {
+			question: 'can you swim?',
+			answer: true
+		}, {
+			question: 'can you sit for long periods of time?',
+			answer: true
+		}]
+	};
+
+	module.exports = QuestionPage;
+
+/***/ },
+/* 218 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _reactRouter = __webpack_require__(1);
+
+	var React = __webpack_require__(24);
+
+	var Counter = React.createClass({
+	  displayName: 'Counter',
+
+
+	  //timer component
+	  getInitialState: function getInitialState() {
+	    return {
+	      secondsToElapse: this.props.initialStartTime
+	    };
+	  },
+
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    if (nexProps.startTimer) this.startTimer();
+	  },
+	  componentDidUpdate: function componentDidUpdate(prevProps, prevState) {
+	    if (this.state.secondsToElapse === 0) this.props.onTimerFinished();
+	  },
+	  componentWillUnmount: function componentWillUnmount() {
+	    clearInterval(this.interval);
+	  },
+	  _decrementCounter: function _decrementCounter() {
+	    this.setState({ secondsToElapse: this.state.secondsToElapse - 1 });
+	  },
+	  startTimer: function startTimer() {
+	    this.interval = setInterval(this._decrementCounter, 1000);
+	  },
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      { className: this.props.startTimer ? "count-down" : "hidden-counter" },
+	      ' 00:',
+	      this.state.secondsToelapse
+	    );
+	  }
+	});
+
+	Counter.propTypes = {
+	  initialStartTime: React.PropTypes.number.isRequired,
+	  startTimer: React.PropTypes.bool.isRequired,
+	  onTimerFinished: React.PropTypes.func.isRequired
+	};
+	Counter.defaultProps = {
+	  initialStartime: 60
+	};
+	// end of counter html mark up
+
+	module.exports = Counter;
+
+/***/ },
+/* 219 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var React = __webpack_require__(24);
+
+	var NotFound = React.createClass({
+	  displayName: "NotFound",
 
 
 	  render: function render() {
 	    return React.createElement(
-	      'div',
-	      null,
-	      'Welcome'
+	      "div",
+	      { className: "wrapper" },
+	      "not found"
 	    );
 	  }
 	});
-	module.exports = Welcome;
+	module.exports = NotFound;
+
+/***/ },
+/* 220 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	module.exports = __webpack_require__(26);
+
 
 /***/ }
 /******/ ]);
