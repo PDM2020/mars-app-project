@@ -4,36 +4,51 @@ import {browserHistory} from 'react-router';
 import Counter from './counter-screen.jsx';
 import QuestionPage from './questionPage-screen.jsx';
 
+var questions = [
+ 	    {
+  	    question: 'do you like mars?',
+  	    answer: true
+  	  },
+  	    {
+  	    question: 'can you swim?',
+  	    answer: true
+  	  },
+  	    {
+  	    question: 'can you sit for long periods of time?',
+  	    answer: true
+	}
+];
+
 var TakeTest = React.createClass({
-  getInitialState({
-    startTimer: false
-  },
-  _handleCorrect(){
-    browserHistory.push('./accepted');
-  },
-  _handleFailure(){
-    browserHistory.push('./rejected');
-  },
   getInitialState(){
-    return {startTimer: false};
+  return {startTimer: false};
   },
+
   startQuiz: function(){
     this.setState({startTimer: true});
+  },
 
-    render()
-    return(
+  _handleCorrect(){
+    browserHistory.push('/accepted');
+  },
+
+  _handleFailure(){
+    browserHistory.push('/rejected');
+  },
+
+    render(){
+    return  (
       <section className="mars-quiz">
-          <div className="count-down">
           <Counter
-            initialStartTime={10}
-            onTimeFinished={this._handleFailure}
-            startTimer={this.state.startTimer}/>
-        </div>
-          {!this.state.startTimer ? <button className="btn" onClick={this.startQuiz}><span>begin evaluation</span></button>: ''}
-          {!this.state.startTimer ?  : <QuestionPage onCorrect={this._handleCorrect} onFailure={this._handleFailure questions={question}/>}
-        </div>
+            initialStartTime={60}
+            onTimerFinished={this._handleFailure}
+            startTimer={this.state.startTimer} />
+
+          { !this.state.startTimer ? <button className="allCaps btn-box" onClick={this.startQuiz}>begin evaluation</button> : ''}
+          { !this.state.startTimer ? '' : <QuestionPage onCorrect={this._handleCorrect} onFailure={this._handleFailure} questions={questions}/>}
     </section>
-  }
+
+    )
   }
 });
 module.exports = TakeTest;

@@ -4,7 +4,7 @@ import { Router, Route, BrowserHistory, Redirect } from 'react-router';
 
 var Rejected = React.createClass({
   changePage:function(){
-  this.props.history.push('/questionpage')
+  this.props.history.push('/welcome')
   },
 
 render:function(){

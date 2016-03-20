@@ -9,10 +9,10 @@ var SubmitQuestion = React.createClass({
   render() {
     return (
       <div>
-        <p>{this.props.currentQuestion.question}</p>
-        <div className='btn-box'>
-        <button onClick={this._handleTrue}><span>True</span></button>
-        <button onClick={() => this.props.onAnswer(false)}><span>False</span></button>
+        <h3>{this.props.currentQuestion.question}</h3>
+          <div>
+        <button className="btn-box" onClick={this._handleTrue}>True</button>
+        <button onClick={() => this.props.onAnswer(false)}>False</button>
       </div>
     </div>
     );

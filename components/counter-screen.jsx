@@ -14,6 +14,13 @@ var Counter = React.createClass({
     componentWillReceiveProps(nextProps) {
       if(nextProps.startTimer) this.startTimer();
     },
+    startTimer(){
+      this.interval = setInterval(this._decrementCounter, 1000);
+    },
+
+    _decrementCounter(){
+      this.setState({secondsToElapse: this.state.secondsToElapse - 1});
+      },
 
     componentDidUpdate(prevProps,prevState) {
       if(this.state.secondsToElapse === 0) this.props.onTimerFinished();
@@ -23,17 +30,9 @@ var Counter = React.createClass({
       clearInterval(this.interval);
     },
 
-    _decrementCounter(){
-      this.setState({secondsToElapse: this.state.secondsToElapse - 1});
-      },
-
-        startTimer(){
-          this.interval = setInterval(this._decrementCounter, 1000);
-        },
-
       render () {
         return (
-          <div className={this.props.startTimer ? "count-down" : "count-down hidden-counter" }> {this.state.secondsToElapse}</div>
+          <div className={this.props.startTimer ? "count-down" : "count-down hidden-counter" }> :{this.state.secondsToElapse}</div>
     )
   },
   });
